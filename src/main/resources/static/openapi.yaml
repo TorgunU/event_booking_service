@@ -1,0 +1,316 @@
+openapi: 3.0.0
+info:
+  description: API for managing event locations
+  title: Event Management Service
+  version: 1.0.0
+servers:
+- url: http://localhost:8080
+security:
+- bearerAuth: []
+tags:
+- name: Locations
+- name: Events
+- name: Users
+paths:
+  /locations:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/EventLocation'
+                type: array
+          description: Список всех локаций
+        "401":
+          content:
+            application/json:
+              example:
+                message: Необходима аутентификация
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Аутентификация отсутствует или не удалась
+        "403":
+          content:
+            application/json:
+              example:
+                message: Недостаточно прав
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: У пользователя недостаточно прав для выполнения этой операции
+        "500":
+          content:
+            application/json:
+              example:
+                message: Внутренняя ошибка сервера
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Внутренняя ошибка сервера
+      summary: List all event locations
+      tags:
+      - Locations
+      x-accepts: application/json
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventLocation'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventLocation'
+          description: Место успешно создано
+        "401":
+          content:
+            application/json:
+              example:
+                message: Необходима аутентификация
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Аутентификация отсутствует или не удалась
+        "403":
+          content:
+            application/json:
+              example:
+                message: Недостаточно прав
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: У пользователя недостаточно прав для выполнения этой операции
+        "500":
+          content:
+            application/json:
+              example:
+                message: Внутренняя ошибка сервера
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Внутренняя ошибка сервера
+      summary: Создать новое место
+      tags:
+      - Locations
+      x-content-type: application/json
+      x-accepts: application/json
+  /locations/{locationId}:
+    delete:
+      parameters:
+      - description: Уникальный идентификатор местоположения
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+      responses:
+        "204":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventLocation'
+          description: Место успешно удалено
+        "401":
+          content:
+            application/json:
+              example:
+                message: Необходима аутентификация
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Аутентификация отсутствует или не удалась
+        "403":
+          content:
+            application/json:
+              example:
+                message: Недостаточно прав
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: У пользователя недостаточно прав для выполнения этой операции
+        "500":
+          content:
+            application/json:
+              example:
+                message: Внутренняя ошибка сервера
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Внутренняя ошибка сервера
+      summary: Удалить место
+      tags:
+      - Locations
+      x-accepts: application/json
+    get:
+      parameters:
+      - description: Уникальный идентификатор местоположения
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventLocation'
+          description: Успешный ответ
+        "401":
+          content:
+            application/json:
+              example:
+                message: Необходима аутентификация
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Аутентификация отсутствует или не удалась
+        "403":
+          content:
+            application/json:
+              example:
+                message: Недостаточно прав
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: У пользователя недостаточно прав для выполнения этой операции
+        "500":
+          content:
+            application/json:
+              example:
+                message: Внутренняя ошибка сервера
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Внутренняя ошибка сервера
+      summary: Получить место по ID
+      tags:
+      - Locations
+      x-accepts: application/json
+    put:
+      parameters:
+      - description: Уникальный идентификатор местоположения
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventLocation'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventLocation'
+          description: Место успешно обновлено
+        "401":
+          content:
+            application/json:
+              example:
+                message: Необходима аутентификация
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Аутентификация отсутствует или не удалась
+        "403":
+          content:
+            application/json:
+              example:
+                message: Недостаточно прав
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: У пользователя недостаточно прав для выполнения этой операции
+        "500":
+          content:
+            application/json:
+              example:
+                message: Внутренняя ошибка сервера
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Внутренняя ошибка сервера
+      summary: Обновить место
+      tags:
+      - Locations
+      x-content-type: application/json
+      x-accepts: application/json
+components:
+  parameters:
+    locationId:
+      description: Уникальный идентификатор местоположения
+      in: path
+      name: id
+      required: true
+      schema:
+        format: int64
+        type: integer
+  responses:
+    Unauthorized:
+      content:
+        application/json:
+          example:
+            message: Необходима аутентификация
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+      description: Аутентификация отсутствует или не удалась
+    Forbidden:
+      content:
+        application/json:
+          example:
+            message: Недостаточно прав
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+      description: У пользователя недостаточно прав для выполнения этой операции
+    ServerError:
+      content:
+        application/json:
+          example:
+            message: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+      description: Внутренняя ошибка сервера
+  schemas:
+    ErrorResponse:
+      properties:
+        message:
+          type: string
+      required:
+      - message
+      type: object
+    EventLocation:
+      example:
+        address: "г. СПб, Пятилеток 1"
+        name: Ледовый дворец
+        description: Спортивно-концертный комплекс в Санкт-Петербурге
+        id: 42
+        capacity: 12300
+      properties:
+        id:
+          example: 42
+          format: int64
+          readOnly: true
+          type: integer
+        name:
+          example: Ледовый дворец
+          type: string
+        address:
+          example: "г. СПб, Пятилеток 1"
+          type: string
+        capacity:
+          example: 12300
+          format: int32
+          type: integer
+        description:
+          example: Спортивно-концертный комплекс в Санкт-Петербурге
+          type: string
+      required:
+      - address
+      - capacity
+      - name
+      type: object
+  securitySchemes:
+    bearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http
+
