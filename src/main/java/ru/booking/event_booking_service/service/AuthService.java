@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
-import ru.booking.event_booking_service.dto.JwtRequest;
+import ru.booking.event_booking_service.responce.JwtRequest;
 import ru.booking.event_booking_service.token.JwtTokenManager;
 
 @Service

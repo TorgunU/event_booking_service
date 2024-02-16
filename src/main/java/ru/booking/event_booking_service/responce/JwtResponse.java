@@ -1,4 +1,4 @@
-package ru.booking.event_booking_service.dto;
+package ru.booking.event_booking_service.responce;
 
 public class JwtResponse {
     private String token;

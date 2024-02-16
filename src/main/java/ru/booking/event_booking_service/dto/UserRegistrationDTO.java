@@ -1,8 +1,12 @@
 package ru.booking.event_booking_service.dto;
 
-public class JwtRequest {
+public class UserRegistrationDTO {
     private String username;
     private String password;
+    private String verifyPassword;
+
+    public UserRegistrationDTO() {
+    }
 
     public String getUsername() {
         return username;
@@ -18,5 +22,13 @@ public class JwtRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getVerifyPassword() {
+        return verifyPassword;
+    }
+
+    public void setVerifyPassword(String verifyPassword) {
+        this.verifyPassword = verifyPassword;
     }
 }
