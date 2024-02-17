@@ -21,9 +21,10 @@ public class Role {
     public Role() {
     }
 
-    public Role(int id, String name) {
+    public Role(int id, String name, List<User> userList) {
         this.id = id;
         this.name = name;
+        this.userList = userList;
     }
 
     public int getId() {
@@ -40,6 +41,14 @@ public class Role {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<User> getUserList() {
+        return userList;
+    }
+
+    public void setUserList(List<User> userList) {
+        this.userList = userList;
     }
 
     public void addUser(User user) {

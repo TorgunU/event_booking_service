@@ -27,7 +27,7 @@ public class AuthController {
         this.userRegistrationService = userRegistrationService;
     }
 
-    @PostMapping
+    @PostMapping()
     public ResponseEntity<JwtResponse> createAuthToken(@RequestBody JwtRequest request)
             throws BadCredentialsException {
         String token = authService.createAuthToken(request);

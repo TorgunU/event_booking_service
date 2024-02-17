@@ -3,6 +3,7 @@ package ru.booking.event_booking_service.configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -58,10 +59,14 @@ public class SecurityConfiguration {
                         new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .authorizeHttpRequests(authorizeHttpRequest ->
                         authorizeHttpRequest
-                                .requestMatchers("/login").hasRole("admin")
-                                .requestMatchers("/locations").authenticated()
+                                .requestMatchers(HttpMethod.POST, "/auth/registration").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/locations").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/locations/{locationID}").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PUT, "/locations/{locationID}").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/locations/**").hasRole("USER")
                                 .anyRequest().permitAll())
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
 }

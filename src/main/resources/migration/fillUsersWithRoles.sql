@@ -1,6 +1,6 @@
 insert into roles(name)
 values ('admin'),
-       ('userEntity');
+       ('user');
 
 insert into users(login, password, role)
 values ('admin', 'admin', 1),

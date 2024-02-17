@@ -29,7 +29,7 @@ paths:
               example:
                 message: Необходима аутентификация
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/MessageResponse'
           description: Аутентификация отсутствует или не удалась
         "403":
           content:
@@ -37,7 +37,7 @@ paths:
               example:
                 message: Недостаточно прав
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/MessageResponse'
           description: У пользователя недостаточно прав для выполнения этой операции
         "500":
           content:
@@ -45,12 +45,11 @@ paths:
               example:
                 message: Внутренняя ошибка сервера
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/MessageResponse'
           description: Внутренняя ошибка сервера
-      summary: List all event locations
+      summary: "List all event locations. roles=[user,admin]"
       tags:
       - Locations
-      x-accepts: application/json
     post:
       requestBody:
         content:
@@ -71,7 +70,7 @@ paths:
               example:
                 message: Необходима аутентификация
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/MessageResponse'
           description: Аутентификация отсутствует или не удалась
         "403":
           content:
@@ -79,7 +78,7 @@ paths:
               example:
                 message: Недостаточно прав
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/MessageResponse'
           description: У пользователя недостаточно прав для выполнения этой операции
         "500":
           content:
@@ -87,13 +86,11 @@ paths:
               example:
                 message: Внутренняя ошибка сервера
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/MessageResponse'
           description: Внутренняя ошибка сервера
-      summary: Создать новое место
+      summary: "Создать новое место. roles=[admin]"
       tags:
       - Locations
-      x-content-type: application/json
-      x-accepts: application/json
   /locations/{locationId}:
     delete:
       parameters:
@@ -117,7 +114,7 @@ paths:
               example:
                 message: Необходима аутентификация
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/MessageResponse'
           description: Аутентификация отсутствует или не удалась
         "403":
           content:
@@ -125,20 +122,27 @@ paths:
               example:
                 message: Недостаточно прав
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/MessageResponse'
           description: У пользователя недостаточно прав для выполнения этой операции
+        "404":
+          content:
+            application/json:
+              example:
+                message: Пользователь не найден
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: Сущность не найдена
         "500":
           content:
             application/json:
               example:
                 message: Внутренняя ошибка сервера
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/MessageResponse'
           description: Внутренняя ошибка сервера
-      summary: Удалить место
+      summary: "Удалить место. roles=[admin]"
       tags:
       - Locations
-      x-accepts: application/json
     get:
       parameters:
       - description: Уникальный идентификатор местоположения
@@ -161,7 +165,7 @@ paths:
               example:
                 message: Необходима аутентификация
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/MessageResponse'
           description: Аутентификация отсутствует или не удалась
         "403":
           content:
@@ -169,20 +173,27 @@ paths:
               example:
                 message: Недостаточно прав
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/MessageResponse'
           description: У пользователя недостаточно прав для выполнения этой операции
+        "404":
+          content:
+            application/json:
+              example:
+                message: Пользователь не найден
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: Сущность не найдена
         "500":
           content:
             application/json:
               example:
                 message: Внутренняя ошибка сервера
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/MessageResponse'
           description: Внутренняя ошибка сервера
-      summary: Получить место по ID
+      summary: "Получить место по ID. roles=[user,admin]"
       tags:
       - Locations
-      x-accepts: application/json
     put:
       parameters:
       - description: Уникальный идентификатор местоположения
@@ -211,7 +222,7 @@ paths:
               example:
                 message: Необходима аутентификация
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/MessageResponse'
           description: Аутентификация отсутствует или не удалась
         "403":
           content:
@@ -219,25 +230,161 @@ paths:
               example:
                 message: Недостаточно прав
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/MessageResponse'
           description: У пользователя недостаточно прав для выполнения этой операции
+        "404":
+          content:
+            application/json:
+              example:
+                message: Пользователь не найден
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: Сущность не найдена
         "500":
           content:
             application/json:
               example:
                 message: Внутренняя ошибка сервера
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/MessageResponse'
           description: Внутренняя ошибка сервера
-      summary: Обновить место
+      summary: "Обновить место. roles=[admin]"
       tags:
       - Locations
-      x-content-type: application/json
-      x-accepts: application/json
+  /users:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistration'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: Пользователь успешно зарегистрирован
+        "400":
+          content:
+            application/json:
+              example:
+                message: "Логин занят, попробуйте другой"
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: "запрос с ошибкой. Например, попытка занять занятый логин"
+        "500":
+          content:
+            application/json:
+              example:
+                message: Внутренняя ошибка сервера
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: Внутренняя ошибка сервера
+      security: []
+      summary: Регистрация нового пользователя
+      tags:
+      - Users
+  /users/{userId}:
+    get:
+      parameters:
+      - description: Уникальный идентификатор пользователя
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: Информация о пользователе
+        "401":
+          content:
+            application/json:
+              example:
+                message: Необходима аутентификация
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: Аутентификация отсутствует или не удалась
+        "403":
+          content:
+            application/json:
+              example:
+                message: Недостаточно прав
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: У пользователя недостаточно прав для выполнения этой операции
+        "404":
+          content:
+            application/json:
+              example:
+                message: Пользователь не найден
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: Сущность не найдена
+        "500":
+          content:
+            application/json:
+              example:
+                message: Внутренняя ошибка сервера
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: Внутренняя ошибка сервера
+      summary: "Получить информацию о пользователе по ID. roles=[admin]"
+      tags:
+      - Users
+  /users/auth:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCredentials'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtResponse'
+          description: "Авторизация успешна, возвращен JWT"
+        "401":
+          content:
+            application/json:
+              example:
+                message: Необходима аутентификация
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: Аутентификация отсутствует или не удалась
+        "500":
+          content:
+            application/json:
+              example:
+                message: Внутренняя ошибка сервера
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: Внутренняя ошибка сервера
+      security: []
+      summary: Авторизация пользователя и получение JWT
+      tags:
+      - Users
 components:
   parameters:
     locationId:
       description: Уникальный идентификатор местоположения
+      in: path
+      name: id
+      required: true
+      schema:
+        format: int64
+        type: integer
+    userId:
+      description: Уникальный идентификатор пользователя
       in: path
       name: id
       required: true
@@ -251,7 +398,7 @@ components:
           example:
             message: Необходима аутентификация
           schema:
-            $ref: '#/components/schemas/ErrorResponse'
+            $ref: '#/components/schemas/MessageResponse'
       description: Аутентификация отсутствует или не удалась
     Forbidden:
       content:
@@ -259,7 +406,7 @@ components:
           example:
             message: Недостаточно прав
           schema:
-            $ref: '#/components/schemas/ErrorResponse'
+            $ref: '#/components/schemas/MessageResponse'
       description: У пользователя недостаточно прав для выполнения этой операции
     ServerError:
       content:
@@ -267,10 +414,26 @@ components:
           example:
             message: Внутренняя ошибка сервера
           schema:
-            $ref: '#/components/schemas/ErrorResponse'
+            $ref: '#/components/schemas/MessageResponse'
       description: Внутренняя ошибка сервера
+    BadRequest:
+      content:
+        application/json:
+          example:
+            message: "Логин занят, попробуйте другой"
+          schema:
+            $ref: '#/components/schemas/MessageResponse'
+      description: "запрос с ошибкой. Например, попытка занять занятый логин"
+    NotFound:
+      content:
+        application/json:
+          example:
+            message: Пользователь не найден
+          schema:
+            $ref: '#/components/schemas/MessageResponse'
+      description: Сущность не найдена
   schemas:
-    ErrorResponse:
+    MessageResponse:
       properties:
         message:
           type: string
@@ -308,9 +471,79 @@ components:
       - capacity
       - name
       type: object
+    User:
+      example:
+        role: user
+        id: 1
+        login: user_login
+        age: 21
+      properties:
+        id:
+          example: 1
+          format: int64
+          readOnly: true
+          type: integer
+        login:
+          example: user_login
+          type: string
+        age:
+          example: 21
+          type: int
+        role:
+          enum:
+          - user
+          - admin
+          example: user
+          type: string
+      type: object
+    UserRegistration:
+      example:
+        password: strongpassword
+        login: new_user
+        age: 21
+      properties:
+        login:
+          example: new_user
+          type: string
+        password:
+          example: strongpassword
+          format: password
+          type: string
+        age:
+          example: 21
+          type: int
+      required:
+      - age
+      - login
+      - password
+      type: object
+    JwtResponse:
+      example:
+        jwtToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+      properties:
+        jwtToken:
+          description: JWT token for authenticated user
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+          type: string
+      type: object
+    UserCredentials:
+      example:
+        password: userpassword
+        login: user_login
+      properties:
+        login:
+          example: user_login
+          type: string
+        password:
+          example: userpassword
+          format: password
+          type: string
+      required:
+      - login
+      - password
+      type: object
   securitySchemes:
     bearerAuth:
       bearerFormat: JWT
       scheme: bearer
       type: http
-

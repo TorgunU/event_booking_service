@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface UserService {
     User getUserByUsername(String username);
+    User getUserById(Long id);
     void saveUser(User user);
-    boolean isUserExist(String name);
-    void setRoleAdmin(Long id);
+    boolean isUserExist(String username);
     List<User> getAllUsers();
 }

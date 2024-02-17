@@ -31,9 +31,12 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 
     @Override
     public void createNewUser(UserRegistrationDTO userRegistrationDTO) {
+        if (userService.isUserExist(userRegistrationDTO.getUsername())) {
+            throw new IllegalArgumentException("This login is already contains!");
+        }
         userRegistrationDTO.setPassword(passwordEncoder.encode(userRegistrationDTO.getPassword()));
         User user = modelMapper.map(userRegistrationDTO, User.class);
-        RoleEntity roleEntity = roleRepository.findByName("user");
+        RoleEntity roleEntity = roleRepository.findByName("ROLE_USER");
         if (roleEntity == null) {
             throw new DataSourceLookupFailureException("Data source could not be obtained");
         }
