@@ -3,42 +3,53 @@ package ru.booking.event_booking_service.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.booking.event_booking_service.dto.UserRegistrationDTO;
+import ru.booking.event_booking_service.model.User;
 import ru.booking.event_booking_service.responce.JwtRequest;
 import ru.booking.event_booking_service.responce.JwtResponse;
 import ru.booking.event_booking_service.responce.MessageResponse;
-import ru.booking.event_booking_service.service.AuthService;
+import ru.booking.event_booking_service.service.RegistrationService;
 import ru.booking.event_booking_service.service.UserRegistrationService;
+import ru.booking.event_booking_service.service.UserService;
 import ru.booking.event_booking_service.utils.ResponseUtils;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/users")
 public class AuthController {
-    private final AuthService authService;
+    private final RegistrationService registrationService;
     private final UserRegistrationService userRegistrationService;
+    private final UserService userService;
 
     @Autowired
-    public AuthController(AuthService authService, UserRegistrationService userRegistrationService) {
-        this.authService = authService;
+    public AuthController(RegistrationService registrationService, UserRegistrationService userRegistrationService, UserService userService) {
+        this.registrationService = registrationService;
         this.userRegistrationService = userRegistrationService;
+        this.userService = userService;
     }
 
-    @PostMapping()
+    @PostMapping("/auth")
     public ResponseEntity<JwtResponse> createAuthToken(@RequestBody JwtRequest request)
             throws BadCredentialsException {
-        String token = authService.createAuthToken(request);
+        String token = registrationService.createAuthToken(request);
         return ResponseEntity.ok(new JwtResponse(token));
     }
 
-    @PostMapping("/registration")
+    @PostMapping()
     public ResponseEntity<MessageResponse> createNewUser(@RequestBody UserRegistrationDTO userRegistrationDTO) {
         userRegistrationService.createNewUser(userRegistrationDTO);
         return ResponseEntity.ok(ResponseUtils
                 .getSuccessResponse(ResponseUtils.CREATION_MESSAGE,
                         userRegistrationDTO.getUsername()));
     }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<MessageResponse> getUserById(@PathVariable Long userId) {
+        User user = userService.getUserById(userId);
+        return ResponseEntity.ok(ResponseUtils
+                .getSuccessResponse(ResponseUtils.CREATION_MESSAGE,
+                        user.toString()));
+    }
+
+
 }

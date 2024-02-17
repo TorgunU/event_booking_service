@@ -59,12 +59,13 @@ public class SecurityConfiguration {
                         new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .authorizeHttpRequests(authorizeHttpRequest ->
                         authorizeHttpRequest
-                                .requestMatchers(HttpMethod.POST, "/auth/registration").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "users/auth").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/users/{userId}").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.POST, "/locations").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.DELETE, "/locations/{locationID}").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/locations/{locationID}").hasAnyRole("ADMIN", "USER")
                                 .requestMatchers(HttpMethod.PUT, "/locations/{locationID}").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/locations/**").hasRole("USER")
-                                .anyRequest().permitAll())
+                                .requestMatchers(HttpMethod.GET, "/locations/**").hasAnyRole("ADMIN", "USER")
+                                .anyRequest().authenticated())
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

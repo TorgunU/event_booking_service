@@ -12,15 +12,15 @@ import ru.booking.event_booking_service.responce.JwtRequest;
 import ru.booking.event_booking_service.token.JwtTokenManager;
 
 @Service
-public class AuthService {
+public class RegistrationService {
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
     private final JwtTokenManager jwtTokenManager;
 
     @Autowired
-    public AuthService(AuthenticationManager authenticationManager,
-                          UserDetailsService userDetailsService,
-                          JwtTokenManager jwtTokenManager) {
+    public RegistrationService(AuthenticationManager authenticationManager,
+                               UserDetailsService userDetailsService,
+                               JwtTokenManager jwtTokenManager) {
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.jwtTokenManager = jwtTokenManager;
