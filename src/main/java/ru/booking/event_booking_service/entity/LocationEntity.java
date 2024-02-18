@@ -1,31 +1,40 @@
 package ru.booking.event_booking_service.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "location")
-public class Location {
+public class LocationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
+    @NotNull
     private Long id;
 
-    @Column(name = "address")
+    @Column(name = "address", nullable = false)
+    @NotBlank
+    @NotNull
     private String address;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
+    @NotBlank
+    @NotNull
     private String name;
 
-    @Column(name = "description")
+    @Column(name = "description", nullable = false)
     private String description;
 
     @Column(name = "capacity")
+    @NotBlank
+    @NotNull
     private int capacity;
 
-    public Location() {
+    public LocationEntity() {
     }
 
-    public Location(String address, String name, String description, int capacity) {
+    public LocationEntity(String address, String name, String description, int capacity) {
         this.address = address;
         this.name = name;
         this.description = description;
