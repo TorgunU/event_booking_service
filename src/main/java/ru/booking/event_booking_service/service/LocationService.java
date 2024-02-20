@@ -53,7 +53,10 @@ public class LocationService {
 
     @Transactional
     public Location updateLocationById(Long id, Location location) {
-        if (!repository.existsById(id)) {
+        if (!location.id().equals(id)) {
+            throw new IllegalArgumentException("Id of request body (" + location.id() +
+                    ") doesn't match with required id (" + id + ").");
+        } else if (!repository.existsById(id)) {
             throw new EntityNotFoundException("Can't find location. Invalid id: " + id);
         }
         LocationEntity locationEntity = mapper.fromLocationToEntity.apply(location);
