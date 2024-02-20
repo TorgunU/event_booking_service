@@ -33,13 +33,10 @@ public class LocationMapper {
             entity.getCapacity()
     );
 
-    public final Function<Location, LocationEntity> fromLocationToEntity = location -> {
-        LocationEntity entity = new LocationEntity();
-        entity.setId(location.id());
-        entity.setAddress(location.address());
-        entity.setName(location.name());
-        entity.setDescription(location.description());
-        entity.setCapacity(location.capacity());
-        return entity;
-    };
+    public final Function<Location, LocationEntity> fromLocationToEntity = location -> new LocationEntity(
+            location.address(),
+            location.name(),
+            location.description(),
+            location.capacity()
+    );
 }
