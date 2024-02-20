@@ -58,7 +58,7 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now()
         );
         return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
+                .status(HttpStatus.BAD_REQUEST)
                 .body(message);
     }
 }

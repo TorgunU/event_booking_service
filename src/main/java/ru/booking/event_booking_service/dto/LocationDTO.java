@@ -5,9 +5,9 @@ import jakarta.validation.constraints.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record LocationDTO(
-        @NotNull Long id,
-        @NotBlank@NotNull String address,
-        @NotBlank @NotNull String name,
+        @Min(value = 1) Long id,
+        @NotBlank String address,
+        @NotBlank String name,
         String description,
         @Min(value = 1) int capacity) {
 }

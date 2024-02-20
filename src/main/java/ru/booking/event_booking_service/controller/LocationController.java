@@ -56,7 +56,7 @@ public class LocationController {
 
     @PutMapping("/{locationID}")
     public ResponseEntity<LocationDTO> updateLocation(@PathVariable Long locationID,
-                                               @RequestBody LocationDTO locationDTO) {
+                                               @RequestBody @Valid LocationDTO locationDTO) {
         Location location = mapper.fromDtoToLocation.apply(locationDTO);
         Location updatedLocation = locationService.updateLocationById(locationID, location);
         LocationDTO updatedDTO = mapper.fromLocationToDto.apply(updatedLocation);
