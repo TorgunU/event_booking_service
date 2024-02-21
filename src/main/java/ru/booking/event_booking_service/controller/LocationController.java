@@ -57,6 +57,9 @@ public class LocationController {
     @PutMapping("/{locationID}")
     public ResponseEntity<LocationDTO> updateLocation(@PathVariable Long locationID,
                                                       @RequestBody @Valid LocationDTO locationDTO) {
+        if (locationDTO.id() == null) {
+            throw new IllegalArgumentException("Required id is missing in the request body.");
+        }
         Location location = mapper.fromDtoToLocation.apply(locationDTO);
         Location updatedLocation = locationService.updateLocationById(locationID, location);
         LocationDTO updatedDTO = mapper.fromLocationToDto.apply(updatedLocation);

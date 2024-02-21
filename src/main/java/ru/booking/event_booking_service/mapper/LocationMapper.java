@@ -34,6 +34,7 @@ public class LocationMapper {
     );
 
     public final Function<Location, LocationEntity> fromLocationToEntity = location -> new LocationEntity(
+            location.id(),
             location.address(),
             location.name(),
             location.description(),

@@ -25,7 +25,8 @@ public class LocationEntity {
     public LocationEntity() {
     }
 
-    public LocationEntity(String address, String name, String description, int capacity) {
+    public LocationEntity(Long id, String address, String name, String description, int capacity) {
+        this.id = id;
         this.address = address;
         this.name = name;
         this.description = description;

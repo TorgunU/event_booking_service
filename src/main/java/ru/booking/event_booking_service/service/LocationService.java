@@ -53,10 +53,7 @@ public class LocationService {
 
     @Transactional
     public Location updateLocationById(Long id, Location location) {
-        Long locationId = location.id();
-        if (locationId == null) {
-            throw new IllegalArgumentException("Required id is missing in the request body.");
-        } if (!locationId.equals(id)) {
+        if (!location.id().equals(id)) {
             throw new IllegalArgumentException("Id of request body (" + location.id() +
                     ") doesn't match with required id (" + id + ").");
         } else if (!repository.existsById(id)) {
