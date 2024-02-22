@@ -4,28 +4,29 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "location")
-public class Location {
+public class LocationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "address")
+    @Column(name = "address", nullable = false)
     private String address;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "description")
     private String description;
 
-    @Column(name = "capacity")
+    @Column(name = "capacity", nullable = false)
     private int capacity;
 
-    public Location() {
+    public LocationEntity() {
     }
 
-    public Location(String address, String name, String description, int capacity) {
+    public LocationEntity(Long id, String address, String name, String description, int capacity) {
+        this.id = id;
         this.address = address;
         this.name = name;
         this.description = description;
