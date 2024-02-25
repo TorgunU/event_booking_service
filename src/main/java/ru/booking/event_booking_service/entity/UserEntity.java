@@ -1,32 +1,34 @@
 package ru.booking.event_booking_service.entity;
 
 import jakarta.persistence.*;
+import ru.booking.event_booking_service.role.Role;
 
 @Entity
 @Table(name = "users")
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "login")
+    @Column(name = "name", nullable = false)
     private String username;
 
-    @Column(name = "password")
-    private String password;
+    @Column(name = "passwordhash", nullable = false)
+    private String passwordHash;
 
-    @ManyToOne
-    @JoinColumn(name = "role")
-    private RoleEntity roleEntity;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private Role role;
 
     public UserEntity() {
     }
 
-    public UserEntity(Long id, String username, String password) {
+    public UserEntity(Long id, String username, String passwordHash, Role role) {
         this.id = id;
         this.username = username;
-        this.password = password;
+        this.passwordHash = passwordHash;
+        this.role = role;
     }
 
     public Long getId() {
@@ -41,23 +43,23 @@ public class UserEntity {
         return username;
     }
 
-    public void setUsername(String name) {
-        this.username = name;
+    public void setUsername(String userName) {
+        this.username = userName;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPasswordHash() {
+        return passwordHash;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
     }
 
-    public RoleEntity getRole() {
-        return roleEntity;
+    public Role getRole() {
+        return role;
     }
 
-    public void setRole(RoleEntity roleEntity) {
-        this.roleEntity = roleEntity;
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

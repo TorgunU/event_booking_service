@@ -29,8 +29,8 @@ public class RegistrationService {
     public String createAuthToken(@RequestBody JwtRequest request)
             throws BadCredentialsException {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                request.getUsername(), request.getPassword()));
-        UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
+                request.username(), request.password()));
+        UserDetails userDetails = userDetailsService.loadUserByUsername(request.username());
         return jwtTokenManager.generateToken(userDetails);
     }
 }

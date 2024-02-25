@@ -3,7 +3,7 @@ package ru.booking.event_booking_service.security;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import ru.booking.event_booking_service.model.User;
+import ru.booking.event_booking_service.buisnessEntity.User;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -21,17 +21,17 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(user.getRole().getName()));
+        return Collections.singletonList(new SimpleGrantedAuthority(user.role().name()));
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return user.password();
     }
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return user.username();
     }
 
     @Override

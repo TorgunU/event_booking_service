@@ -1,17 +1,8 @@
 package ru.booking.event_booking_service.responce;
 
-public class JwtResponse {
-    private String token;
+import jakarta.validation.constraints.NotEmpty;
 
-    public JwtResponse(String token) {
-        this.token = token;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
+public record JwtResponse(
+        @NotEmpty
+        String token) {
 }

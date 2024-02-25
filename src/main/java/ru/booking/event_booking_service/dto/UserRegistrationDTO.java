@@ -1,34 +1,14 @@
 package ru.booking.event_booking_service.dto;
 
-public class UserRegistrationDTO {
-    private String username;
-    private String password;
-    private String verifyPassword;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
-    public UserRegistrationDTO() {
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getVerifyPassword() {
-        return verifyPassword;
-    }
-
-    public void setVerifyPassword(String verifyPassword) {
-        this.verifyPassword = verifyPassword;
-    }
+public record UserRegistrationDTO(
+        @Size(min = 2, max = 50, message = "Username must be between 2 and 50 characters")
+        @NotEmpty(message = "Username cannot be empty")
+        String username,
+        @Size(min = 8, max = 70, message = "Password must be between 8 and 70 characters")
+        String password,
+        @NotEmpty(message = "Password verification field cannot be empty")
+        String verifyPassword) {
 }
