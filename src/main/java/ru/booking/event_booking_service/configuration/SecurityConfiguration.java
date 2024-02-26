@@ -45,7 +45,8 @@ public class SecurityConfiguration {
                         "/swagger-resources/**",
                         "/configuration/security",
                         "/swagger-ui.html",
-                        "/webjars/**");
+                        "/webjars/**",
+                        "http://localhost:8080/swagger-ui/index.html");
     }
 
     @Bean
