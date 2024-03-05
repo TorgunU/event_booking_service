@@ -21,14 +21,15 @@ public class UserRegistrationService {
     }
 
     @Transactional
-    public User createNewUser(UserRegistrationDTO userRegistrationDTO) {
-        if (userService.isUserExist(userRegistrationDTO.username())) {
+    public User createNewUser(UserRegistrationDTO userDTO) {
+        if (userService.isUserExist(userDTO.username())) {
             throw new IllegalArgumentException("This login is already contains!");
         }
-        String encodedPassword = passwordEncoder.encode(userRegistrationDTO.password());
+        String encodedPassword = passwordEncoder.encode(userDTO.password());
         User user = new User(
                 null,
-                userRegistrationDTO.username(),
+                userDTO.username(),
+                userDTO.age(),
                 encodedPassword,
                 Role.ROLE_USER
         );

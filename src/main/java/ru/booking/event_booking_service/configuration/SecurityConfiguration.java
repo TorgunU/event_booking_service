@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -16,18 +15,25 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import ru.booking.event_booking_service.handler.UserAccessDeniedHandler;
+import ru.booking.event_booking_service.handler.UserAuthenticationEntryPoint;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfiguration {
     private final JwtRequestFilter jwtRequestFilter;
+    private final UserAuthenticationEntryPoint authenticationEntryPoint;
+    private final UserAccessDeniedHandler accessDeniedHandler;
 
     @Autowired
-    public SecurityConfiguration(JwtRequestFilter jwtRequestFilter) {
+    public SecurityConfiguration(JwtRequestFilter jwtRequestFilter,
+                                 UserAuthenticationEntryPoint authenticationEntryPoint,
+                                 UserAccessDeniedHandler accessDeniedHandler) {
         this.jwtRequestFilter = jwtRequestFilter;
+        this.authenticationEntryPoint = authenticationEntryPoint;
+        this.accessDeniedHandler = accessDeniedHandler;
     }
 
     @Bean
@@ -39,9 +45,12 @@ public class SecurityConfiguration {
                         "/lib/**",
                         "/favicon.ico",
                         "/swagger-ui/**",
-                        "/v2/api-docs",
-                        "/v3/api-docs",
+                        "/v3/api-docs/**",
+                        "/v3/api-docs.yaml",
+                        "/openapi.yaml/**",
+                        "/swagger-ui/openapi.yaml/**", // не работает
                         "/configuration/ui",
+                        "/v3/api-docs/swagger-config/**",
                         "/swagger-resources/**",
                         "/configuration/security",
                         "/swagger-ui.html",
@@ -68,11 +77,13 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(
-                        new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                        .accessDeniedHandler(accessDeniedHandler))
                 .authorizeHttpRequests(authorizeHttpRequest ->
                         authorizeHttpRequest
                                 .requestMatchers(HttpMethod.POST, "users/auth").permitAll()
+                                .requestMatchers(HttpMethod.POST, "users").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/users/{userId}").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.POST, "/locations").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/locations/{locationID}").hasAnyRole("ADMIN", "USER")
@@ -82,5 +93,4 @@ public class SecurityConfiguration {
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-
 }

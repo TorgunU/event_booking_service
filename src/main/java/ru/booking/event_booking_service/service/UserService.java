@@ -9,9 +9,6 @@ import ru.booking.event_booking_service.entity.UserEntity;
 import ru.booking.event_booking_service.mapper.UserMapper;
 import ru.booking.event_booking_service.repository.UserRepository;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
 public class UserService {
     private UserRepository repository;
@@ -25,22 +22,18 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public User getUserByUsername(String username) {
-        UserEntity userEntity = repository.findAll().stream()
-                .filter(user -> username.equals(user.getUsername()))
-                .findFirst()
-                .orElseThrow(() -> new UsernameNotFoundException("User wasn't founded " +
-                        "by name: " + username));
+        UserEntity userEntity = repository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User wasn't founded by username: "
+                        + username));
         return userMapper.mapFromEntityToUser.apply(userEntity);
     }
 
     @Transactional(readOnly = true)
     public User getUserById(Long id) {
-        UserEntity user = repository.findAll().stream()
-                .filter(userEntity -> id.equals(userEntity.getId()))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("User wasn't founded " +
-                        "by id: " + id));
-        return userMapper.mapFromEntityToUser.apply(user);
+        UserEntity userEntity = repository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("User wasn't founded by id: " +
+                        id));
+        return userMapper.mapFromEntityToUser.apply(userEntity);
     }
 
     @Transactional
@@ -52,16 +45,6 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public boolean isUserExist(String username) {
-        Optional<UserEntity> optionalUserEntity = repository.findAll().stream()
-                .filter(user -> username.equals(user.getUsername()))
-                .findFirst();
-        return optionalUserEntity.isPresent();
-    }
-
-    @Transactional(readOnly = true)
-    public List<User> getAllUsers() {
-        return repository.findAll().stream()
-                .map(userEntity -> userMapper.mapFromEntityToUser.apply(userEntity))
-                .toList();
+        return repository.existsByUsername(username);
     }
 }

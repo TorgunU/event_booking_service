@@ -8,44 +8,50 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 import ru.booking.event_booking_service.buisnessEntity.User;
 import ru.booking.event_booking_service.dto.UserRegistrationDTO;
+import ru.booking.event_booking_service.mapper.UserResponseMapper;
 import ru.booking.event_booking_service.responce.JwtRequest;
 import ru.booking.event_booking_service.responce.JwtResponse;
-import ru.booking.event_booking_service.service.RegistrationService;
+import ru.booking.event_booking_service.responce.UserResponse;
+import ru.booking.event_booking_service.service.AuthorizationService;
 import ru.booking.event_booking_service.service.UserRegistrationService;
 import ru.booking.event_booking_service.service.UserService;
 
 @RestController
 @RequestMapping("/users")
 public class AuthController {
-    private final RegistrationService registrationService;
+    private final AuthorizationService authorizationService;
     private final UserRegistrationService userRegistrationService;
     private final UserService userService;
+    private final UserResponseMapper userResponseMapper;
 
     @Autowired
-    public AuthController(RegistrationService registrationService,
+    public AuthController(AuthorizationService authorizationService,
                           UserRegistrationService userRegistrationService,
-                          UserService userService) {
-        this.registrationService = registrationService;
+                          UserService userService, UserResponseMapper userResponseMapper) {
+        this.authorizationService = authorizationService;
         this.userRegistrationService = userRegistrationService;
         this.userService = userService;
+        this.userResponseMapper = userResponseMapper;
     }
 
     @PostMapping("/auth")
     public ResponseEntity<JwtResponse> createAuthToken(@RequestBody JwtRequest request)
             throws BadCredentialsException {
-        String token = registrationService.createAuthToken(request);
+        String token = authorizationService.createAuthToken(request);
         return ResponseEntity.ok(new JwtResponse(token));
     }
 
     @PostMapping()
-    public ResponseEntity<User> createNewUser(@RequestBody @Valid UserRegistrationDTO userRegistrationDTO) {
+    public ResponseEntity<UserResponse> createNewUser(@RequestBody @Valid UserRegistrationDTO userRegistrationDTO) {
         User user = userRegistrationService.createNewUser(userRegistrationDTO);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+        UserResponse response = userResponseMapper.mapFromUserToResponse.apply(user);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<User> getUserById(@PathVariable Long userId) {
+    public ResponseEntity<UserResponse> getUserById(@PathVariable Long userId) {
         User user = userService.getUserById(userId);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        UserResponse response = userResponseMapper.mapFromUserToResponse.apply(user);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

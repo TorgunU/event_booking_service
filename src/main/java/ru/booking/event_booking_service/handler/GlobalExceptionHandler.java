@@ -1,15 +1,13 @@
-package ru.booking.event_booking_service.global;
+package ru.booking.event_booking_service.handler;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import ru.booking.event_booking_service.dto.MessageErrorDTO;
+import ru.booking.event_booking_service.dto.ErrorMessageDTO;
 
 import java.time.LocalDateTime;
 
@@ -18,7 +16,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = { EntityNotFoundException.class })
     protected ResponseEntity<Object> handleEntityNotFound(Exception exception) {
-        var message = new MessageErrorDTO(
+        var message = new ErrorMessageDTO(
                 "Сущность не найдена",
                 exception.getMessage(),
                 LocalDateTime.now()
@@ -32,7 +30,7 @@ public class GlobalExceptionHandler {
             MethodArgumentNotValidException.class
     })
     protected ResponseEntity<Object> handleConstraintViolationException(Exception exception) {
-        var message = new MessageErrorDTO(
+        var message = new ErrorMessageDTO(
                 "Ошибка валидации запроса",
                 exception.getMessage(),
                 LocalDateTime.now()
@@ -43,7 +41,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = { Exception.class })
     protected ResponseEntity<Object> handleInternalServerError(Exception exception) {
-        var message = new MessageErrorDTO(
+        var message = new ErrorMessageDTO(
                 "Внутренняя ошибка сервера",
                 exception.getMessage(),
                 LocalDateTime.now()
@@ -54,7 +52,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = {IllegalArgumentException.class})
     public ResponseEntity<Object> handleException(Exception exception) {
-        var message = new MessageErrorDTO(
+        var message = new ErrorMessageDTO(
                 "Недопустимое значение",
                 exception.getMessage(),
                 LocalDateTime.now()
@@ -63,16 +61,4 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(message);
     }
-
-    @ExceptionHandler(value = {AccessDeniedException.class, InsufficientAuthenticationException.class})
-    protected ResponseEntity<Object> handleAccessDeniedException(Exception exception) {
-        var message = new MessageErrorDTO(
-                "Не авторизован",
-                exception.getMessage(),
-                LocalDateTime.now()
-        );
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(message);
-    }
-
 }
