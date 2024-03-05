@@ -1,4 +1,4 @@
-package ru.booking.event_booking_service.global;
+package ru.booking.event_booking_service.handler;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import ru.booking.event_booking_service.dto.MessageErrorDTO;
+import ru.booking.event_booking_service.dto.ErrorMessageDTO;
 
 import java.time.LocalDateTime;
 
@@ -16,7 +16,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = { EntityNotFoundException.class })
     protected ResponseEntity<Object> handleEntityNotFound(Exception exception) {
-        var message = new MessageErrorDTO(
+        var message = new ErrorMessageDTO(
                 "Сущность не найдена",
                 exception.getMessage(),
                 LocalDateTime.now()
@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
             MethodArgumentNotValidException.class
     })
     protected ResponseEntity<Object> handleConstraintViolationException(Exception exception) {
-        var message = new MessageErrorDTO(
+        var message = new ErrorMessageDTO(
                 "Ошибка валидации запроса",
                 exception.getMessage(),
                 LocalDateTime.now()
@@ -41,7 +41,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = { Exception.class })
     protected ResponseEntity<Object> handleInternalServerError(Exception exception) {
-        var message = new MessageErrorDTO(
+        var message = new ErrorMessageDTO(
                 "Внутренняя ошибка сервера",
                 exception.getMessage(),
                 LocalDateTime.now()
@@ -52,7 +52,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = {IllegalArgumentException.class})
     public ResponseEntity<Object> handleException(Exception exception) {
-        var message = new MessageErrorDTO(
+        var message = new ErrorMessageDTO(
                 "Недопустимое значение",
                 exception.getMessage(),
                 LocalDateTime.now()

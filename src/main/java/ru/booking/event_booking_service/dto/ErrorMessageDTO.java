@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDateTime;
 
-public class MessageErrorDTO {
+public class ErrorMessageDTO {
     @NotBlank
     private final String message;
     @NotBlank
@@ -12,7 +12,7 @@ public class MessageErrorDTO {
     @NotBlank
     private final LocalDateTime localDateTime;
 
-    public MessageErrorDTO(String message, String detailedMessage, LocalDateTime localDateTime) {
+    public ErrorMessageDTO(String message, String detailedMessage, LocalDateTime localDateTime) {
         this.message = message;
         this.detailedMessage = detailedMessage;
         this.localDateTime = localDateTime;

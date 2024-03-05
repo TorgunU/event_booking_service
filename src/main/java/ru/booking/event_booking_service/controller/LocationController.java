@@ -12,7 +12,8 @@ import ru.booking.event_booking_service.service.LocationService;
 
 import java.util.List;
 
-@RestController("/locations")
+@RestController()
+@RequestMapping("/locations")
 public class LocationController {
     private LocationService locationService;
     private LocationMapper mapper;
